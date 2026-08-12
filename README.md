@@ -1,5 +1,4 @@
 ### Day 1 — Project Setup
-
 - Created the RepoIntel project and GitHub repository
 - Set up a Python virtual environment using `venv`
 - Installed and configured GitPython
@@ -26,3 +25,13 @@
 - Tested scanning on nested repositories
 - Tested RepoIntel with a larger ASP.NET repository
 - Successfully scanned a repository containing 326 files and 90 directories
+
+### Day 4 — File Type & Language Analysis
+- Added file extension detection using `Path.suffix`
+- Counted file extensions using dictionaries
+- Handled files without extensions
+- Added programming language mapping
+- Added other file type mapping
+- Separated programming languages from other file types
+- Added fallback handling for unknown extensions
+- Tested with the stock-market-analysis repository
