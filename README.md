@@ -35,3 +35,15 @@
 - Separated programming languages from other file types
 - Added fallback handling for unknown extensions
 - Tested with the stock-market-analysis repository
+
+### Day 5 — Important Repository Files
+* Created `experiments/scan_repo.py` for repository inspection
+* Simplified the scanning logic to focus on repository analysis
+* Learned to identify important files using `Path.name`
+* Detected `README.md` files
+* Read README contents using `Path.read_text()`
+* Detected `requirements.txt`
+* Read dependency file contents using `Path.read_text()`
+* Learned that `requirements.txt` contains package dependencies rather than Python `import` statements
+* Understood the difference between repository documentation and dependency declarations
+* Completed the basic important-file inspection stage
