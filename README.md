@@ -47,3 +47,20 @@
 * Learned that `requirements.txt` contains package dependencies rather than Python `import` statements
 * Understood the difference between repository documentation and dependency declarations
 * Completed the basic important-file inspection stage
+
+### Day 6 — Dependency Analysis
+* Learned how to split dependency strings using `split()`
+* Learned how to split a requirements file into individual lines using `splitlines()`
+* Extracted package names and versions from `requirements.txt`
+* Handled dependencies with exact versions using `==`
+* Added support for version operators:
+
+  * `==`
+  * `>=`
+  * `<=`
+  * `~=`
+  * `!=`
+* Handled packages without a specified version
+* Learned how to use a boolean flag (`found`) to track whether a matching operator was detected
+* Built a basic dependency parser for `requirements.txt`
+* Completed the basic dependency analysis stage
