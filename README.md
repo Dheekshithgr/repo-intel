@@ -64,3 +64,15 @@
 * Learned how to use a boolean flag (`found`) to track whether a matching operator was detected
 * Built a basic dependency parser for `requirements.txt`
 * Completed the basic dependency analysis stage
+
+### Day 7 — Repository Profile
+- Learned how to use dictionaries to represent repository information
+- Created a structured repository profile
+- Stored file and directory counts in the profile
+- Stored README content in the profile
+- Stored parsed dependencies in the profile
+- Stored detected programming languages in the profile
+- Used lists to store unique programming languages
+- Changed RepoIntel from directly printing information to collecting structured data
+- Added a clean repository profile summary
+- Successfully built a repository profile from a real GitHub repository
