@@ -76,3 +76,18 @@
 - Changed RepoIntel from directly printing information to collecting structured data
 - Added a clean repository profile summary
 - Successfully built a repository profile from a real GitHub repository
+
+### Day 8 — Repository Analysis Functions
+- Learned how to create and use Python functions
+- Learned how to pass arguments to functions
+- Learned how to return values from functions
+- Created `scan_repository()` to handle repository cloning and scanning
+- Returned the repository profile from `scan_repository()`
+- Learned about the lifetime of `TemporaryDirectory()`
+- Kept repository scanning inside the temporary directory context
+- Created `parse_dependencies()` to handle dependency parsing separately
+- Created `read_readme()` to handle README reading separately
+- Created `detect_language()` to handle programming language detection
+- Applied the concept of separation of concerns
+- Reduced the responsibility of the main scanning function by moving specific tasks into separate functions
+- Successfully tested the refactored repository analyzer
