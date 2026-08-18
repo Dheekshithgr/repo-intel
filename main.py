@@ -9,6 +9,9 @@ def parse_dependencies(content):
     lines = content.splitlines()
 
     for line in lines:
+        
+        if not line.strip() or line.strip().startswith("#"):
+            continue
 
         separators = ["==", ">=", "<=", "~=", "!="]
         found = False
@@ -30,7 +33,7 @@ def parse_dependencies(content):
     return dependencies
 
 def read_readme(path):
-    return path.read_text()
+    return path.read_text(encoding="utf-8")
 
 def detect_language(extension, programming_languages):
     if extension in programming_languages:
@@ -42,7 +45,12 @@ def scan_repository(source):
 
     with tempfile.TemporaryDirectory() as temp_dir:
 
-        Repo.clone_from(source, temp_dir)
+        try:
+            Repo.clone_from(source, temp_dir)
+        except Exception as e:
+            print("Error: Could not clone the repository.")
+            print("Reason:", e)
+            return None
 
         project_path = Path(temp_dir)
 
@@ -50,7 +58,8 @@ def scan_repository(source):
             "files": 0,
             "directories": 0,
             "languages": [],
-            "dependencies": {}
+            "dependencies": {},
+            "readme": None
         }
 
         programming_languages = {
@@ -83,7 +92,7 @@ def scan_repository(source):
 
                     elif item.name == "requirements.txt":
 
-                        requirements_content = item.read_text()
+                        requirements_content = item.read_text(encoding="utf-8")
                         repository["dependencies"] = parse_dependencies(requirements_content)
                 
                 elif item.is_dir():
@@ -98,6 +107,8 @@ def main():
     source = input("\nEnter any GitHub URL: ")
 
     repository = scan_repository(source)
+    if repository is None:
+        return
 
     print("\nRepository Profile")
     print("------------------")
@@ -107,7 +118,10 @@ def main():
     print("Languages:", repository["languages"])
     print("Dependencies:", repository["dependencies"])
 
-    if "readme" in repository:
+    if repository["readme"] is not None:
         print("README: Found")
+    else:
+        print("README: Not Found")
 
-main()
+if __name__ == "__main__":
+    main()
