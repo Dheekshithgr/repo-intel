@@ -25,13 +25,15 @@ RepoIntel is a Python-based tool that scans GitHub repositories and generates a 
 
 ### Phase 4 — Refactoring & Reliability
 - Created reusable functions
-- Separated dependency, README, and language analysis
+- Separated dependency, README, language, and structure analysis
 - Moved the analyzer into `main.py`
 - Added `main()` as the application entry point
 - Added dependency parsing for blank lines and comments
 - Added UTF-8 text reading
 - Added basic repository cloning error handling
-- Tested the analyzer with different repository configurations
+- Added repository structure analysis
+- Detect important files and directories
+- Count files and directories
 
 ## Tech Stack
 
@@ -44,6 +46,8 @@ RepoIntel is a Python-based tool that scans GitHub repositories and generates a 
 
 - GitHub repository cloning
 - File and directory analysis
+- Repository structure analysis
+- Important file and directory detection
 - Language detection
 - README detection
 - Dependency parsing

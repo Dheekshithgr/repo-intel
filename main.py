@@ -41,6 +41,55 @@ def detect_language(extension, programming_languages):
 
     return None
 
+def analyze_structure(project_path):
+
+    important_directories = [
+        "src",
+        "tests",
+        "test",
+        "docs",
+        "config",
+        "scripts",
+        "data"
+    ]
+    important_files = [
+        "README.md",
+        "requirements.txt",
+        "pyproject.toml",
+        "setup.py",
+        "Dockerfile",
+        ".gitignore"
+    ]
+
+    found_directories = []
+    found_files = []
+    file_count = 0
+    directory_count = 0
+    
+    for item in project_path.rglob("*"):
+
+        if ".git" in item.parts:
+            continue
+
+        if item.is_dir():
+            directory_count+=1
+            if item.name in important_directories:
+                if item.name not in found_directories:
+                    found_directories.append(item.name)
+        elif item.is_file():
+            file_count+=1
+            if item.name in important_files:
+                if item.name not in found_files:
+                    found_files.append(item.name)
+    
+    return {
+        "files": file_count,
+        "directories": directory_count,
+        "important_directories": found_directories,
+        "important_files": found_files
+        
+    }
+
 def scan_repository(source):
 
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -53,14 +102,19 @@ def scan_repository(source):
             return None
 
         project_path = Path(temp_dir)
+        structure = analyze_structure(project_path)
 
         repository = {
-            "files": 0,
-            "directories": 0,
+            "files": structure["files"],
+            "directories": structure["directories"],
             "languages": [],
             "dependencies": {},
-            "readme": None
+            "readme": None,
+            "important_directories": structure["important_directories"],
+            "important_files": structure["important_files"]
         }
+        repository["important_directories"] = structure["important_directories"]
+        repository["important_files"] = structure["important_files"]
 
         programming_languages = {
             ".py": "Python",
@@ -75,8 +129,6 @@ def scan_repository(source):
             if ".git" not in item.parts:
 
                 if item.is_file():
-
-                    repository["files"] += 1
 
                     extension = item.suffix
 
@@ -94,10 +146,6 @@ def scan_repository(source):
 
                         requirements_content = item.read_text(encoding="utf-8")
                         repository["dependencies"] = parse_dependencies(requirements_content)
-                
-                elif item.is_dir():
-
-                    repository["directories"] += 1
                                         
     return repository
 
@@ -115,6 +163,8 @@ def main():
 
     print("Files:", repository["files"])
     print("Directories:", repository["directories"])
+    print("Important Files:", repository["important_files"])
+    print("Important Directories:", repository["important_directories"])
     print("Languages:", repository["languages"])
     print("Dependencies:", repository["dependencies"])
 
