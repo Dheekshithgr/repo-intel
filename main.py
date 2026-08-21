@@ -139,6 +139,30 @@ def detect_technologies(repository):
 
     return technologies
 
+def analyze_git(project_path):
+
+    repo = Repo(project_path)
+
+    branch = repo.active_branch.name
+
+    commits = list(repo.iter_commits())
+
+    commit_count = len(commits)
+
+    latest_commit = repo.head.commit
+
+    git_info = {
+        "branch": branch,
+        "commit_count": commit_count,
+        "latest_commit": {
+            "message": latest_commit.message.strip(),
+            "author": latest_commit.author.name,
+            "date": latest_commit.committed_datetime
+        }
+    }
+
+    return git_info
+
 
 def scan_repository(source):
 
@@ -157,6 +181,7 @@ def scan_repository(source):
         project_path = Path(temp_dir)
 
         structure = analyze_structure(project_path)
+        git_info = analyze_git(project_path)
 
         repository = {
             "files": structure["files"],
@@ -166,7 +191,8 @@ def scan_repository(source):
             "languages": [],
             "dependencies": {},
             "technologies": [],
-            "readme": None
+            "readme": None,
+            "git": git_info
         }
 
         programming_languages = {
@@ -237,6 +263,18 @@ def main():
         print("README: Found")
     else:
         print("README: Not Found")
+        
+    print("\nGit Information")
+    print("---------------")
+
+    print("Current Branch:", repository["git"]["branch"])
+    print("Total Commits:", repository["git"]["commit_count"])
+
+    print("Latest Commit Message:",repository["git"]["latest_commit"]["message"])
+
+    print("Latest Commit Author:",repository["git"]["latest_commit"]["author"])
+
+    print("Latest Commit Date:",repository["git"]["latest_commit"]["date"])
 
 
 if __name__ == "__main__":

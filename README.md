@@ -44,6 +44,14 @@ RepoIntel is a Python-based tool that scans GitHub repositories and generates a 
 - Detect FastAPI projects
 - Analyze repository files and dependencies to identify technologies
 
+### Phase 6 — Git Repository Analysis
+- Detect current Git branch
+- Count total commits
+- Analyze the latest commit
+- Extract latest commit message
+- Extract commit author
+- Extract commit date
+
 ## Tech Stack
 
 - Python
@@ -63,6 +71,9 @@ RepoIntel is a Python-based tool that scans GitHub repositories and generates a 
 - Repository profiling
 - Basic error handling
 - Technology and framework detection
+- Git repository metadata analysis
+- Current branch detection
+- Commit history analysis
 
 ## Future Goals
 
