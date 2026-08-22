@@ -1,6 +1,9 @@
 from git import Repo
 import tempfile
 from pathlib import Path
+import json
+from urllib.request import urlopen
+from urllib.error import URLError, HTTPError
 
 
 def parse_dependencies(content):
@@ -139,6 +142,7 @@ def detect_technologies(repository):
 
     return technologies
 
+
 def analyze_git(project_path):
 
     repo = Repo(project_path)
@@ -164,6 +168,53 @@ def analyze_git(project_path):
     return git_info
 
 
+def get_github_info(source):
+
+    source = source.rstrip("/")
+
+    if source.endswith(".git"):
+        source = source[:-4]
+
+    parts = source.split("/")
+
+    owner = parts[-2]
+    repository_name = parts[-1]
+
+    api_url = (
+        f"https://api.github.com/repos/"
+        f"{owner}/{repository_name}"
+    )
+
+    try:
+
+        with urlopen(api_url) as response:
+            data = json.load(response)
+
+    except HTTPError as e:
+        print("Error: Could not access GitHub repository metadata.")
+        print("Reason:", e)
+        return None
+
+    except URLError as e:
+        print("Error: Could not connect to GitHub API.")
+        print("Reason:", e)
+        return None
+
+    github_info = {
+        "owner": data["owner"]["login"],
+        "name": data["name"],
+        "description": data["description"],
+        "stars": data["stargazers_count"],
+        "forks": data["forks_count"],
+        "open_issues": data["open_issues_count"],
+        "topics": data["topics"],
+        "created_at": data["created_at"],
+        "updated_at": data["updated_at"]
+    }
+
+    return github_info
+
+
 def scan_repository(source):
 
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -181,7 +232,10 @@ def scan_repository(source):
         project_path = Path(temp_dir)
 
         structure = analyze_structure(project_path)
+
         git_info = analyze_git(project_path)
+
+        github_info = get_github_info(source)
 
         repository = {
             "files": structure["files"],
@@ -192,7 +246,8 @@ def scan_repository(source):
             "dependencies": {},
             "technologies": [],
             "readme": None,
-            "git": git_info
+            "git": git_info,
+            "github": github_info
         }
 
         programming_languages = {
@@ -263,18 +318,42 @@ def main():
         print("README: Found")
     else:
         print("README: Not Found")
-        
+
     print("\nGit Information")
     print("---------------")
 
     print("Current Branch:", repository["git"]["branch"])
     print("Total Commits:", repository["git"]["commit_count"])
 
-    print("Latest Commit Message:",repository["git"]["latest_commit"]["message"])
+    print(
+        "Latest Commit Message:",
+        repository["git"]["latest_commit"]["message"]
+    )
 
-    print("Latest Commit Author:",repository["git"]["latest_commit"]["author"])
+    print(
+        "Latest Commit Author:",
+        repository["git"]["latest_commit"]["author"]
+    )
 
-    print("Latest Commit Date:",repository["git"]["latest_commit"]["date"])
+    print(
+        "Latest Commit Date:",
+        repository["git"]["latest_commit"]["date"]
+    )
+
+    if repository["github"] is not None:
+
+        print("\nGitHub Information")
+        print("------------------")
+
+        print("Owner:", repository["github"]["owner"])
+        print("Repository:", repository["github"]["name"])
+        print("Description:", repository["github"]["description"])
+        print("Stars:", repository["github"]["stars"])
+        print("Forks:", repository["github"]["forks"])
+        print("Open Issues:", repository["github"]["open_issues"])
+        print("Topics:", repository["github"]["topics"])
+        print("Created:", repository["github"]["created_at"])
+        print("Last Updated:", repository["github"]["updated_at"])
 
 
 if __name__ == "__main__":

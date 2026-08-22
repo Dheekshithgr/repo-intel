@@ -52,6 +52,15 @@ RepoIntel is a Python-based tool that scans GitHub repositories and generates a 
 - Extract commit author
 - Extract commit date
 
+### Phase 7 — GitHub Metadata Analysis
+- Analyze GitHub repository metadata
+- Detect repository owner and name
+- Extract repository description
+- Detect stars and forks
+- Detect open issues
+- Extract repository topics
+- Analyze repository creation and update dates
+
 ## Tech Stack
 
 - Python
@@ -74,6 +83,10 @@ RepoIntel is a Python-based tool that scans GitHub repositories and generates a 
 - Git repository metadata analysis
 - Current branch detection
 - Commit history analysis
+- GitHub repository metadata analysis
+- Repository stars and forks detection
+- Open issues detection
+- GitHub topics detection
 
 ## Future Goals
 
